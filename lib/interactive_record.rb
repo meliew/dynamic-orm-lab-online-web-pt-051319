@@ -27,7 +27,8 @@ def initialize(options={})
   end
 
   def table_name_for_insert
-    self.class.table_name 
+    self.class.table_name
+    table_name
 
   end
 
