@@ -19,3 +19,4 @@ column_names << row["name"]
 end
 column_names.compact
 end
+end
