@@ -15,14 +15,14 @@ class InteractiveRecord
     table_info = DB[:conn].execute(sql)
     column_names = []
     table_info.each do |row|
-column_names << row["name"]
-end
-column_names.compact
-end
+      column_names << row["name"]
+    end
+    column_names.compact
+  end
 
-def initialize(options={})
-  options.each do |property, value|
-    self.send("#{property}=", value)
+  def initialize(options={})
+    options.each do |property, value|
+      self.send("#{property}=", value)
     end
   end
 
@@ -43,23 +43,23 @@ def initialize(options={})
     self.class.column_names.delete_if {|col| col == "id"}.join(", ")
   end
 
-def self.find_by_name(name)
-  sql = "SELECT * FROM #{self.table_name} WHERE name = ?"
-  DB[:conn].execute(sql, name)
-end
+  def self.find_by_name(name)
+    sql = "SELECT * FROM #{self.table_name} WHERE name = ?"
+    DB[:conn].execute(sql, name)
+  end
 
-def self.find_by(attribute)
-  sql = "SELECT * FROM #{self.table_name} WHERE #{attribute.keys[0].to_s} = '#{attribute.values[0].to_s}'"
+  def self.find_by(attribute)
+    sql = "SELECT * FROM #{self.table_name} WHERE #{attribute.keys[0].to_s} = '#{attribute.values[0].to_s}'"
     DB[:conn].execute(sql)
-end
+  end
 
-def save
-  sql = "INSERT INTO #{table_name_for_insert} (#{col_names_for_insert})
-  VALUES (#{values_for_insert})"
+  def save
+    sql = "INSERT INTO #{table_name_for_insert} (#{col_names_for_insert})
+    VALUES (#{values_for_insert})"
+    
+    DB[:conn].execute(sql)
 
-  DB[:conn].execute(sql)
-
-  @id = DB[:conn].execute("SELECT last_insert_rowid() FROM #{table_name_for_insert}")[0][0]
-end
+    @id = DB[:conn].execute("SELECT last_insert_rowid() FROM #{table_name_for_insert}")[0][0]
+  end
 
 end
